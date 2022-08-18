@@ -13,7 +13,8 @@ $c = array(
 
 
 	// 存放图片的目录, 普通路径结尾需要添加斜杠
-	'imgPath-html' => 'https://ipacel.cc/+/MoeCounter/img/',
+	'imgPath-html' => 'https://fastly.jsdelivr.net/gh/From-pErfo/Moe-counter-PHP@tree/main/MoeCounter/img/',
+	
 	'imgPath-xml' => 'img/',
 	// 图片名称前缀, xxx{0-9}.png
 	'imgNamePrefix' => 'gelbooru',
@@ -32,71 +33,72 @@ $Name = '';
 $Num = 0;
 
 // 获取URL中的名称 ?u=xxx
-$Name = isset($_GET['u'])? $_GET['u'] : '';
+$Name = isset($_GET['u']) ? $_GET['u'] : '';
 // 获取URL中的猫图片前缀
-$imgPrefix = isset($_GET['c'])? $_GET['c'] : '';
+$imgPrefix = isset($_GET['c']) ? $_GET['c'] : $c['imgNamePrefix'];
 // 指定数据格式, 用于在github等网站中显示
-$imgType = isset($_GET['t'])? $_GET['t'] : 'html';
+$imgType = isset($_GET['t']) ? $_GET['t'] : 'html';
 
 
 // SQL特殊字符转义
 $Name = SQLite3::escapeString($Name);
 // 传入字符串检查
-if(
+if (
 	strlen($Name) >= $c['maxNameLength']
 	|| strlen($imgPrefix) > 256
 	|| strlen($imgType) > 10
-){
+) {
 	echo '参数超出长度限制';
 	exit;
 };
 
 
 // 初始化数据库
-if(file_exists('Counter.db') === false){
+if (file_exists('Counter.db') === false) {
 	echo '数据库不存在';
 	exit();
 }
 $db = new SQLite3('Counter.db');
-$db -> busyTimeout(2000);
-if(!$db){exit();}
+$db->busyTimeout(2000);
+if (!$db) {
+	exit();
+}
 
 
 
 // 判断是否存在记录
-$ret = $db -> query("SELECT Num FROM Counter WHERE Name = '$Name' LIMIT 1;");
+$ret = $db->query("SELECT Num FROM Counter WHERE Name = '$Name' LIMIT 1;");
 $num = $ret->fetchArray(SQLITE3_ASSOC);
 
-if(isset($num['Num'])){
+if (isset($num['Num'])) {
 	// 更新记录 +1
-	$start = $db -> exec("UPDATE Counter SET Num = Num +1 WHERE Name = '$Name';");
+	$start = $db->exec("UPDATE Counter SET Num = Num +1 WHERE Name = '$Name';");
 	/*if($start !== true){
 		//echo '记录更新失败';
 		//exit;
 	}*/
 
 	$Num = $num['Num'];
-
-}else{
+} else {
 	// 判断是否允许创建记录 createRecord
-	if($c['createRecord'] !== true){
+	if ($c['createRecord'] !== true) {
 		echo '服务器不允许创建记录';
 		exit;
 	}
 
 	// 判断最大记录数 maxRecordNum
-	if($c['maxRecordNum'] !== -1){
-		$ret = $db -> query("SELECT max(rowid) FROM Counter;");
+	if ($c['maxRecordNum'] !== -1) {
+		$ret = $db->query("SELECT max(rowid) FROM Counter;");
 		$max_rowid = $ret->fetchArray(SQLITE3_ASSOC);
-		if($max_rowid['max(rowid)'] >= $c['maxRecordNum']){
+		if ($max_rowid['max(rowid)'] >= $c['maxRecordNum']) {
 			echo '达到记录创建限制';
 			exit;
 		}
 	}
 
 	// 创建记录
-	$state = $db -> exec("INSERT INTO Counter (Name, Num) VALUES ('$Name', '1');");
-	if($state !== true){
+	$state = $db->exec("INSERT INTO Counter (Name, Num) VALUES ('$Name', '1');");
+	if ($state !== true) {
 		echo '创建记录失败';
 		exit;
 	}
@@ -113,24 +115,23 @@ $Num = str_pad($Num, $c['minNumLength'], "0", STR_PAD_LEFT);
 $width = $c['imgWidth'];
 $height = $c['imgHeight'];
 $allWidth = $c['minNumLength'] * $c['imgWidth'];
-$_imgPrefix = ($imgPrefix !== '')? $imgPrefix : $c['imgNamePrefix'];
 
 
 // 模式
-if($imgType === 'xml'){
+if ($imgType === 'xml') {
 	$forNum = 0;
-	foreach(str_split($Num) as $key => $value){
+	foreach (str_split($Num) as $key => $value) {
 		$_width = $forNum * $width;
-	
-		$imgUrl = 'data:image/'.$c['imgFormat'].';base64,' . base64_encode(file_get_contents($c['imgPath-xml'] . $c['imgNamePrefix'] . $value .'.'. $c['imgFormat']));
-		
+
+		$imgUrl = 'data:image/' . $c['imgFormat'] . ';base64,' . base64_encode(file_get_contents($c['imgPath-xml'] . $imgPrefix . $value . '.' . $c['imgFormat']));
+
 		$iM .= <<< EOF
 			<image x="$_width" y="0" width="$width" height="$height" xlink:href="$imgUrl" />
 		EOF;
-	
-		$forNum = $forNum +1;
+
+		$forNum = $forNum + 1;
 	};
-	
+
 	// 添加xml标志
 	$iM = <<< EOF
 		<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="$allWidth" height="$height" version="1.1">
@@ -140,23 +141,23 @@ if($imgType === 'xml'){
 			</g>
 		</svg>
 	EOF;
-	
+
 	header("Content-Type: image/svg+xml; charset=utf-8");
 
 
 
-}else if($imgType === 'html'){
+} else if ($imgType === 'html') {
 	$forNum = 0;
-	foreach(str_split($Num) as $key => $value){
+	foreach (str_split($Num) as $key => $value) {
 		$_width = $forNum * $width;
-	
-		$imgUrl = $c['imgPath-html'] . $_imgPrefix . $value .'.'. $c['imgFormat'];
-		
+
+		$imgUrl = $c['imgPath-html'] . $imgPrefix . $value . '.' . $c['imgFormat'];
+
 		$iM .= <<< EOF
 			<image x="$_width" y="0" width="$width" height="$height" xlink:href="$imgUrl" />
 		EOF;
-	
-		$forNum = $forNum +1;
+
+		$forNum = $forNum + 1;
 	};
 
 	$iM = <<< EOF
@@ -166,7 +167,6 @@ if($imgType === 'xml'){
 	EOF;
 
 	header("Content-Type: text/html; charset=utf-8");
-
 }
 
 
@@ -174,4 +174,3 @@ if($imgType === 'xml'){
 // 输出
 header("Cache-Control: max-age=0, no-cache, no-store, must-revalidate");
 echo $iM;
-
