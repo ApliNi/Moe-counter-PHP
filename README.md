@@ -1,6 +1,6 @@
 # Moe-counter-PHP
 
-\[即开即用\] Moe-counter 的 PHP 版本
+即开即用的 Moe-counter (PHP 版本)
 
 ![Moe-counter](https://ipacel.cc/+/MoeCounter/?u=github&t=xml)
 
@@ -12,17 +12,19 @@
 
 ---
 
-配置: 
+### 配置
 打开 index.php, 第4行开始的数组就是软件配置
 
-URL: 
+### URL
 ```
 ?u=name # 定义一个用于计数的名称
-可选 ?c=cat # 自定义猫图片前缀 (默认使用配置中的值)
-可选 ?t=xml # 使用 base64 传输图片, 用于解决 github 等网站无法加载的问题 (默认使用html)
+可选 ?c=cat # 自定义猫图片文件名前缀 (默认使用配置中的值)
+可选 ?t=xml # 使用其他格式传输图片 (默认使用html)
+    xml 格式适用于 github 等图片经过中转的网站.  
+    html 格式支持使用CDN托管图片, 适合放在自己的网页里.  
 ```
-例子: `https://ipacel.cc/+/MoeCounter/?u=name`
 
+例子: `https://ipacel.cc/+/MoeCounter/?u=name`
 
 ---
 
