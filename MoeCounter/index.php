@@ -10,14 +10,11 @@ $c = array(
 	'maxNameLength' => 24,
 	// 显示的最小数字长度
 	'minNumLength' => 7,
-	// 仅以下Name可以使用Base64功能
-	'base64WhiteList' => [
-		'github',
-	],
 
 
 	// 存放图片的目录, 普通路径结尾需要添加斜杠
-	'imgPath' => 'https://ipacel.cc/+/MoeCounter/img/',
+	'imgPath-html' => 'https://ipacel.cc/+/MoeCounter/img/',
+	'imgPath-xml' => 'img/',
 	// 图片名称前缀, xxx{0-9}.png
 	'imgNamePrefix' => 'gelbooru',
 	// 图片格式
@@ -39,7 +36,7 @@ $Name = isset($_GET['u'])? $_GET['u'] : '';
 // 获取URL中的猫图片前缀
 $imgPrefix = isset($_GET['c'])? $_GET['c'] : '';
 // 指定数据格式, 用于在github等网站中显示
-$imgType = isset($_GET['t'])? $_GET['t'] : '';
+$imgType = isset($_GET['t'])? $_GET['t'] : 'html';
 
 
 // SQL特殊字符转义
@@ -118,40 +115,63 @@ $height = $c['imgHeight'];
 $allWidth = $c['minNumLength'] * $c['imgWidth'];
 $_imgPrefix = ($imgPrefix !== '')? $imgPrefix : $c['imgNamePrefix'];
 
-// 遍历每个字符
-$forNum = 0;
-foreach(str_split($Num) as $key => $value){
-	//echo $key.'->'.$value.'|';
-	$_width = $forNum * $width;
 
-	if($imgType === 'base64' && in_array($Name, $c['base64WhiteList']) === true){
-		$imgUrl = 'data:image/gif;base64,' . base64_encode(file_get_contents('img/gelbooru'.$value .'.gif'));
-	}else{
-		$imgUrl = $c['imgPath'] . $_imgPrefix.$value . '.' . $c['imgFormat'];
-	}
+// 模式
+if($imgType === 'xml'){
+	$forNum = 0;
+	foreach(str_split($Num) as $key => $value){
+		$_width = $forNum * $width;
 	
+		$imgUrl = 'data:image/'.$c['imgFormat'].';base64,' . base64_encode(file_get_contents($c['imgPath-xml'] . $c['imgNamePrefix'] . $value .'.'. $c['imgFormat']));
+		
+		$iM .= <<< EOF
+			<image x="$_width" y="0" width="$width" height="$height" xlink:href="$imgUrl" />
+		EOF;
+	
+		$forNum = $forNum +1;
+	};
+	
+	// 添加xml标志
+	$iM = <<< EOF
+		<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="$allWidth" height="$height" version="1.1">
+			<title>[IpacEL]/ MoeCount</title>
+			<g>
+				$iM
+			</g>
+		</svg>
+	EOF;
+	
+	header("Content-Type: image/svg+xml; charset=utf-8");
 
-	$iM .= <<< EOF
-		<image x="$_width" y="0" width="$width" height="$height" xlink:href="$imgUrl" />
 
+
+}else if($imgType === 'html'){
+	$forNum = 0;
+	foreach(str_split($Num) as $key => $value){
+		$_width = $forNum * $width;
+	
+		$imgUrl = $c['imgPath-html'] . $_imgPrefix . $value .'.'. $c['imgFormat'];
+		
+		$iM .= <<< EOF
+			<image x="$_width" y="0" width="$width" height="$height" xlink:href="$imgUrl" />
+		EOF;
+	
+		$forNum = $forNum +1;
+	};
+
+	$iM = <<< EOF
+		<svg width="$allWidth" height="$height" version="1.1">
+			$iM
+		</svg>
 	EOF;
 
-	$forNum = $forNum +1;
-};
+	header("Content-Type: text/html; charset=utf-8");
+
+}
 
 
-// 添加xml标志
-$iM = <<< EOF
-	<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="$allWidth" height="$height" version="1.1">
-   		<title>[IpacEL]/ MoeCount</title>
-   		 <g>
-			$iM
-   		</g>
-	</svg>
-EOF;
 
-
-header("Content-Type: image/svg+xml; charset=utf-8");
+// 输出
 header("Cache-Control: max-age=0, no-cache, no-store, must-revalidate");
 echo $iM;
 
