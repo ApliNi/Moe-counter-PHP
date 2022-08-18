@@ -12,43 +12,16 @@
 
 ---
 
-功能: 
-```
-/// 配置 ///
-$c = array(
-	// 是否允许自动创建记录
-	'createRecord' => true,
-	// 允许自动创建的最大记录数量, 达到此值将不再继续创建
-	'maxRecordNum' => 520000, // -1 禁用
-	// 名称最大长度
-	'maxNameLength' => 24,
-	// 显示的最小数字长度
-	'minNumLength' => 7,
-	// 仅以下Name可以使用Base64功能
-	'base64WhiteList' => [
-		'github',
-	],
+配置: 
+打开 index.php, 第4行开始的数组就是软件配置
 
-
-	// 存放图片的目录, 普通路径结尾需要添加斜杠
-	'imgPath' => 'https://ipacel.cc/+/MoeCounter/img/',
-	// 图片名称前缀, xxx{0-9}.png
-	'imgNamePrefix' => 'gelbooru',
-	// 图片格式
-	'imgFormat' => 'gif',
-
-
-	//图片宽高
-	'imgWidth' => 45,
-	'imgHeight' => 100,
-);
-```
-
+URL: 
 ```
 ?u=name # 定义一个用于计数的名称
-可选 ?c=cat # 自定义猫图片前缀
-可选 ?t=base64 # 使用 base64 传输图片, 用于解决 github 等网站无法加载的问题, 不支持自定义图片目录 "imgPath"
+可选 ?c=cat # 自定义猫图片前缀 (默认使用配置中的值)
+可选 ?t=xml # 使用 base64 传输图片, 用于解决 github 等网站无法加载的问题 (默认使用html)
 ```
+例子: `https://ipacel.cc/+/MoeCounter/?u=name`
 
 
 
