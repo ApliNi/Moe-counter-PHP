@@ -13,7 +13,7 @@ $c = array(
 
 
 	// 存放图片的目录, 普通路径结尾需要添加斜杠
-	'imgPath-html' => 'https://fastly.jsdelivr.net/gh/From-pErfo/Moe-counter-PHP@tree/main/MoeCounter/img/',
+	'imgPath-html' => 'https://cdn.jsdelivr.net/gh/From-pErfo/Moe-counter-PHP@main/MoeCounter/img/',
 	
 	'imgPath-xml' => 'img/',
 	// 图片名称前缀, xxx{0-9}.png
