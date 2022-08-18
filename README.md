@@ -24,4 +24,9 @@ URL:
 例子: `https://ipacel.cc/+/MoeCounter/?u=name`
 
 
+---
+
+图片来源: https://github.com/journey-ad/Moe-counter
+
+
 
