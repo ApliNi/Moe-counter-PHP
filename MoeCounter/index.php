@@ -37,7 +37,7 @@ $Name = isset($_GET['u']) ? $_GET['u'] : '';
 // 获取URL中的猫图片前缀
 $imgPrefix = isset($_GET['c']) ? $_GET['c'] : $c['imgNamePrefix'];
 // 指定数据格式, 用于在github等网站中显示
-$imgType = isset($_GET['t']) ? $_GET['t'] : 'html';
+$imgType = isset($_GET['t']) ? $_GET['t'] : 'xml';
 
 
 // SQL特殊字符转义
