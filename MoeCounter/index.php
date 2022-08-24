@@ -8,16 +8,15 @@ $c = array(
 	'maxRecordNum' => 520000, // -1 禁用
 	// 名称最大长度
 	'maxNameLength' => 24,
-	// 显示的最小数字长度
+	// 图片显示的最小数字长度
 	'minNumLength' => 7,
 
 
 	// 存放图片的目录, 普通路径结尾需要添加斜杠
 	//'imgPath-html' => 'https://ipacel.cc/+/MoeCounter/img/',
 	'imgPath-html' => 'https://cdn.jsdelivr.net/gh/ApliNi/Moe-counter-PHP@main/MoeCounter/img/',
-	
 	'imgPath-xml' => 'img/',
-	// 图片名称前缀, xxx{0-9}.png
+	// 图片名称前缀 `xxx{0-9}.png`, 也可以使用原版Moe-counter的目录 `xxx/`
 	'imgNamePrefix' => 'gelbooru',
 	// 图片格式
 	'imgFormat' => 'gif',
@@ -29,10 +28,8 @@ $c = array(
 );
 
 
-// 全局变量
-$Name = '';
+// 计数器
 $Num = 0;
-
 // 获取URL中的名称 ?u=xxx
 $Name = isset($_GET['u']) ? $_GET['u'] : '';
 // 获取URL中的猫图片前缀
@@ -49,7 +46,8 @@ $Name = SQLite3::escapeString($Name);
 if (
 	strlen($Name) >= $c['maxNameLength']
 	|| strlen($imgPrefix) > 256
-	|| strlen($imgType) > 10
+	|| strlen($imgType) > 5
+	|| strlen($html_imgLocation) > 7
 ) {
 	echo '参数超出长度限制';
 	exit;
@@ -63,9 +61,7 @@ if (file_exists('Counter.db') === false) {
 }
 $db = new SQLite3('Counter.db');
 $db->busyTimeout(2000);
-if (!$db) {
-	exit();
-}
+if (!$db) {exit();}
 
 
 
@@ -73,15 +69,20 @@ if (!$db) {
 $ret = $db->query("SELECT Num FROM Counter WHERE Name = '$Name' LIMIT 1;");
 $num = $ret->fetchArray(SQLITE3_ASSOC);
 
+// 更新记录
 if (isset($num['Num'])) {
-	// 更新记录 +1
+	// +1
 	$start = $db->exec("UPDATE Counter SET Num = Num +1 WHERE Name = '$Name';");
-	/*if($start !== true){
-		//echo '记录更新失败';
-		//exit;
-	}*/
+	// if($start !== true){
+	// 	echo '更新记录失败';
+	// 	exit;
+	// }
 
 	$Num = $num['Num'];
+
+
+
+// 创建记录
 } else {
 	// 判断是否允许创建记录 createRecord
 	if ($c['createRecord'] !== true) {
@@ -111,10 +112,12 @@ if (isset($num['Num'])) {
 
 
 
-// 渲染xml图片
+// 输出图片
 $iM = '';
+// 补 0. 按每个字分割为数组
 $Num = str_pad($Num, $c['minNumLength'], "0", STR_PAD_LEFT);
-
+$Num = str_split($Num);
+// 图片尺寸
 $width = $c['imgWidth'];
 $height = $c['imgHeight'];
 $allWidth = $c['minNumLength'] * $c['imgWidth'];
@@ -122,45 +125,39 @@ $allWidth = $c['minNumLength'] * $c['imgWidth'];
 
 // 模式
 if ($imgType === 'xml') {
-	$forNum = 0;
-	foreach (str_split($Num) as $key => $value) {
-		$_width = $forNum * $width;
+	foreach ($Num as $key => $value) {
+		$_width = $key * $width;
 
-		$imgUrl = 'data:image/' . $c['imgFormat'] . ';base64,' . base64_encode(file_get_contents($c['imgPath-xml'] . $imgPrefix . $value . '.' . $c['imgFormat']));
+		$img = 'data:image/' . $c['imgFormat'] . ';base64,' . base64_encode(file_get_contents($c['imgPath-xml'] . $imgPrefix . $value . '.' . $c['imgFormat']));
 
 		$iM .= <<< EOF
-			<image x="$_width" y="0" width="$width" height="$height" xlink:href="$imgUrl" />
+		<image x="$_width" y="0" width="$width" height="$height" xlink:href="$img" />
 		EOF;
-
-		$forNum = $forNum + 1;
 	};
 
 	// 添加xml标志
 	$iM = <<< EOF
-		<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="$allWidth" height="$height" version="1.1">
-			<title>[IpacEL]/ MoeCount</title>
-			<g>
-				$iM
-			</g>
-		</svg>
+	<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="$allWidth" height="$height" version="1.1">
+		<title>[IpacEL]/ MoeCount</title>
+		<g>
+			$iM
+		</g>
+	</svg>
 	EOF;
 
 	header("Content-Type: image/svg+xml; charset=utf-8");
 
 
 
+// 模式
 } else if ($imgType === 'html') {
-	$forNum = 0;
-	foreach (str_split($Num) as $key => $value) {
-		$_width = $forNum * $width;
 
-		$imgUrl = $c['imgPath-html'] . $imgPrefix . $value . '.' . $c['imgFormat'];
+	foreach ($Num as $key => $value) {
+		$img = $c['imgPath-html'] . $imgPrefix . $value . '.' . $c['imgFormat'];
 
 		$iM .= <<< EOF
-		<img src="$imgUrl" width="$width" height="$height" />
+		<img src="$img" width="$width" height="$height" />
 		EOF;
-
-		$forNum = $forNum + 1;
 	};
 
 	$iM = <<< EOF
