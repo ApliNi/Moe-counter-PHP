@@ -33,6 +33,7 @@
 ```
 <iframe src="https://ipacel.cc/+/MoeCounter/?u=name&t=html&l=right" frameborder="0" scrolling="no" width="100%" height="100px"></iframe>
 ```
+如果您的主机带宽足够小, 可以使用html格式节省流量. 
 
 ---
 
