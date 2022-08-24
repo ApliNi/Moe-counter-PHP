@@ -13,7 +13,8 @@ $c = array(
 
 
 	// 存放图片的目录, 普通路径结尾需要添加斜杠
-	'imgPath-html' => 'https://cdn.jsdelivr.net/gh/From-pErfo/Moe-counter-PHP@main/MoeCounter/img/',
+	//'imgPath-html' => 'https://ipacel.cc/+/MoeCounter/img/',
+	'imgPath-html' => 'https://cdn.jsdelivr.net/gh/ApliNi/Moe-counter-PHP@main/MoeCounter/img/',
 	
 	'imgPath-xml' => 'img/',
 	// 图片名称前缀, xxx{0-9}.png
@@ -38,6 +39,8 @@ $Name = isset($_GET['u']) ? $_GET['u'] : '';
 $imgPrefix = isset($_GET['c']) ? $_GET['c'] : $c['imgNamePrefix'];
 // 指定数据格式, 用于在github等网站中显示
 $imgType = isset($_GET['t']) ? $_GET['t'] : 'xml';
+// html格式时指定显示位置
+$html_imgLocation = isset($_GET['l']) ? $_GET['l'] : 'center';
 
 
 // SQL特殊字符转义
@@ -154,16 +157,14 @@ if ($imgType === 'xml') {
 		$imgUrl = $c['imgPath-html'] . $imgPrefix . $value . '.' . $c['imgFormat'];
 
 		$iM .= <<< EOF
-			<image x="$_width" y="0" width="$width" height="$height" xlink:href="$imgUrl" />
+		<img src="$imgUrl" width="$width" height="$height" />
 		EOF;
 
 		$forNum = $forNum + 1;
 	};
 
 	$iM = <<< EOF
-		<svg width="$allWidth" height="$height" version="1.1">
-			$iM
-		</svg>
+	<body style="margin:0; padding:0;"><div style="min-width:$allWidth; height:$height; text-align:$html_imgLocation;">$iM</div></body>
 	EOF;
 
 	header("Content-Type: text/html; charset=utf-8");
