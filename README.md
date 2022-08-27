@@ -17,21 +17,34 @@
 ### 配置
 打开 index.php, 第4行开始的数组就是软件配置
 
-### URL
+### URL参数
+参数的默认值可以在配置文件中找到
 ```
-?u=name # 定义一个用于保存数字的名称
-可选 ?c=cat # 自定义猫图片文件名前缀 (默认使用配置中的值)
-可选 ?t=html # 使用其他格式传输图片 (默认使用xml)
-    xml 格式适用于 github 等图片经过中转的网站.  
-    html 格式支持使用CDN托管图片, 适合放在自己的网页里.  
-可选 ?l=left | right | counter # 使用html格式时可定义图片位置, 默认counter
+# 运行模式
+?mode=
+	ADD_NUM #加计数器, 每次访问+1, 新建记录为0
+		&name=name #定义一个用于计数的名称
+	MONITOR #数字显示模式, 此模式不需要数据库
+		&num=112 #需要显示的数字
+	RECORD_NUM #显示数据库中的记录总数
+
+# 渲染模式
+&out_mode=
+	xml #XML图片, 适用于Github等代理获取图片的场景
+		&img_prefix=gelbooru #猫图片名称前缀 `xxx{0-9}.png`, 也可以使用原版Moe-counter的目录 `xxx/{0-9}.png`
+	html #HTML代码, 适用于自己的网站和可以嵌入页面的场景, 支持使用CDN外链图片, 带宽占用很低
+		&img_prefix=gelbooru #猫图片名称前缀 `xxx{0-9}.png`, 也可以使用原版Moe-counter的目录 `xxx/{0-9}.png`
+		&align=counter #使用HTML格式时的图片位置, left | right | counter
+	string #输出字符串, 意义不明, 最省带宽
 ```
 
-例子: `https://ipacel.cc/+/MoeCounter/?u=name`
+例子: 
+`https://ipacel.cc/+/MoeCounter/?name=name`
+`https://ipacel.cc/+/MoeCounter/?mode=ADD_NUM&name=name&out_mode=html&img_prefix=gelbooru&align=counter`
 
 #### HTML 格式调用方法
 ```
-<iframe src="https://ipacel.cc/+/MoeCounter/?u=name&t=html&l=right" frameborder="0" scrolling="no" width="100%" height="100px"></iframe>
+<iframe src="---URL---" frameborder="0" scrolling="no" width="100%" height="100px"></iframe>
 ```
 如果您的主机带宽足够小, 可以使用html格式节省流量. 
 
