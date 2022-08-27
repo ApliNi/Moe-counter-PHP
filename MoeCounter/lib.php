@@ -103,7 +103,7 @@ function renderImg($outNum){
 	// 图片尺寸
 	$width = $c['imgWidth'];
 	$height = $c['imgHeight'];
-	$allWidth = $c['minNumLength'] * $c['imgWidth'];
+	$allWidth = strlen($outNum) * $c['imgWidth'];
 
 
 	if ($outMode === 'xml') { // XML 图片格式
