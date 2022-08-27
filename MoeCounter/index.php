@@ -38,8 +38,8 @@ $c = array(
 
 
 	// 存放图片的目录, 普通路径结尾需要添加斜杠
-	//'imgPath-html' => 'https://ipacel.cc/+/MoeCounter/img/',
-	'imgPath-html' => 'https://cdn.jsdelivr.net/gh/ApliNi/Moe-counter-PHP@main/MoeCounter/img/',
+	// 'imgPath-html' => 'https://ipacel.cc/+/MoeCounter/img/',
+	'imgPath-html' => 'https://fastly.jsdelivr.net/gh/ApliNi/Moe-counter-PHP@main/MoeCounter/img/',
 	'imgPath-xml' => 'img/',
 	// 图片名称前缀 `xxx{0-9}.png`, 也可以使用原版Moe-counter的目录 `xxx/{0-9}.png`
 	'img_prefix' => 'gelbooru',
