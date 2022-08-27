@@ -2,7 +2,7 @@
 
 即开即用的 Moe-counter (PHP 版本)
 
-![Moe-counter](https://ipacel.cc/+/MoeCounter/?u=github&t=xml)
+![Moe-counter](https://ipacel.cc/+/MoeCounter2/?name=github)
 
 ---
 
