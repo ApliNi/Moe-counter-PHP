@@ -96,9 +96,10 @@ $c = array(
 	string #输出字符串, 意义不明, 最省带宽
 ```
 
-例子: 
-`https://ipacel.cc/+/MoeCounter2/?name=name`
-`https://ipacel.cc/+/MoeCounter2/?mode=ADD_NUM&name=name&out_mode=html&img_prefix=gelbooru&align=counter`
+例子:   
+`https://ipacel.cc/+/MoeCounter2/?name=name`  
+`https://ipacel.cc/+/MoeCounter2/?mode=ADD_NUM&name=name&out_mode=html&img_prefix=gelbooru&align=counter`  
+`https://ipacel.cc/+/MoeCounter2/?mode=MONITOR&num=12345678901234`  
 
 #### HTML 格式调用方法
 ```
