@@ -97,8 +97,8 @@ $c = array(
 ```
 
 例子: 
-`https://ipacel.cc/+/MoeCounter/?name=name`
-`https://ipacel.cc/+/MoeCounter/?mode=ADD_NUM&name=name&out_mode=html&img_prefix=gelbooru&align=counter`
+`https://ipacel.cc/+/MoeCounter2/?name=name`
+`https://ipacel.cc/+/MoeCounter2/?mode=ADD_NUM&name=name&out_mode=html&img_prefix=gelbooru&align=counter`
 
 #### HTML 格式调用方法
 ```
