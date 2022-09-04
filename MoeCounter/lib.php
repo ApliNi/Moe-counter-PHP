@@ -6,7 +6,7 @@ function getName(){
 	global $c;
 	$name = isset($_GET['name']) ? $_GET['name'] : '';
 	$name = SQLite3::escapeString($name);
-	if (strlen($name) >= $c['maxNameLength']) {
+	if (mb_strlen($name, 'UTF8') >= $c['maxNameLength']) {
 		echo '参数超出长度限制';
 		exit;
 	}
