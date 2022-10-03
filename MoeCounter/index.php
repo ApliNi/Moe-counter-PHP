@@ -33,10 +33,6 @@ $c = array(
 	'minNumLength' => 7,
 
 
-	// 减计数器默认初始值
-	'default_MINUS_NUM' => 9999999,
-
-
 	// 存放图片的目录, 普通路径结尾需要添加斜杠
 	// 'imgPath-html' => 'https://ipacel.cc/+/MoeCounter/img/',
 	'imgPath-html' => 'https://fastly.jsdelivr.net/gh/ApliNi/Moe-counter-PHP@main/MoeCounter/img/',
@@ -57,6 +53,7 @@ $c = array(
 // 初始化
 // 输出数字
 $outNum = 0;
+$iM = '';
 // 获取运行模式
 $mode = isset($_GET['mode'])? $_GET['mode'] : $c['mode'];
 
@@ -104,7 +101,14 @@ if($mode === 'ADD_NUM'){
 }
 
 
+// 自定义数字最小数字长度
+if(isset($_GET['min_num_length'])){
+	$c['minNumLength'] = abs((int)$_GET['min_num_length']);
+}
 
-// 渲染图片
+// 渲染
 $iM = renderImg($outNum);
 echo $iM;
+
+
+

@@ -136,7 +136,7 @@ function renderImg($outNum){
 	} else if ($outMode === 'html') { // 输出 HTML 代码
 		// html格式时指定显示位置
 		$html_imgLocation = isset($_GET['align']) ? $_GET['align'] : $c['html_align'];
-		
+
 		// 按每个字分割为数组
 		$outNum = str_split($outNum);
 

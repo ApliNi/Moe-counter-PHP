@@ -54,10 +54,6 @@ $c = array(
 	'minNumLength' => 7,
 
 
-	// 减计数器默认初始值
-	'default_MINUS_NUM' => 9999999,
-
-
 	// 存放图片的目录, 普通路径结尾需要添加斜杠
 	//'imgPath-html' => 'https://ipacel.cc/+/MoeCounter/img/',
 	'imgPath-html' => 'https://cdn.jsdelivr.net/gh/ApliNi/Moe-counter-PHP@main/MoeCounter/img/',
@@ -83,20 +79,30 @@ $c = array(
 ```
 # 运行模式
 ?mode=
+
 	ADD_NUM #加计数器, 每次访问+1, 新建记录为0
 		&name=name #定义一个用于计数的名称
+
 	MONITOR #数字显示模式, 此模式不需要数据库
 		&num=112 #需要显示的数字
+
 	RECORD_NUM #显示数据库中的记录总数
+
 
 # 渲染模式
 &out_mode=
+
 	xml #XML图片, 适用于Github等代理获取图片的场景
 		&img_prefix=gelbooru #猫图片名称前缀 `xxx{0-9}.png`, 也可以使用原版Moe-counter的目录 `xxx/{0-9}.png`
+		&min_num_length=1 #自定义最小数字长度, 不足的部分会补0
+
 	html #HTML代码, 适用于自己的网站和可以嵌入页面的场景, 支持使用CDN外链图片, 带宽占用很低
-		&img_prefix=gelbooru #猫图片名称前缀 `xxx{0-9}.png`, 也可以使用原版Moe-counter的目录 `xxx/{0-9}.png`
+		&img_prefix=gelbooru
+		&min_num_length=1
 		&align=counter #使用HTML格式时的图片位置, left | right | counter
-	string #输出字符串, 意义不明, 最省带宽
+
+	string #输出字符串, 供js获取数据
+		&min_num_length=1
 ```
 
 例子:   
