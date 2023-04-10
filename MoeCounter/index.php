@@ -3,6 +3,10 @@ require_once 'lib.php';
 
 // 配置文件
 $c = array(
+	// 输入字符串检查
+	// 名称长度检查
+	
+
 	// 默认运行模式
 	/**
 	 * ADD_NUM = 加计数器, 每次访问+1, 新建记录为0
@@ -30,7 +34,7 @@ $c = array(
 	// 名称最大长度
 	'maxNameLength' => 24,
 	// 图片显示的最小数字长度
-	'minNumLength' => 7,
+	'minNumLength' => 5,
 
 
 	// 存放图片的目录, 普通路径结尾需要添加斜杠

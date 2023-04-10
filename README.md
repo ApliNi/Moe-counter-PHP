@@ -1,6 +1,6 @@
 # Moe-counter-PHP
 
-即开即用的 Moe-counter (PHP 版本)
+开箱即用的 Moe-counter (PHP 版本)
 
 ![Moe-counter](https://ipacel.cc/+/MoeCounter2/?name=github)
 
@@ -51,12 +51,12 @@ $c = array(
 	// 名称最大长度
 	'maxNameLength' => 24,
 	// 图片显示的最小数字长度
-	'minNumLength' => 7,
+	'minNumLength' => 5,
 
 
 	// 存放图片的目录, 普通路径结尾需要添加斜杠
-	//'imgPath-html' => 'https://ipacel.cc/+/MoeCounter/img/',
-	'imgPath-html' => 'https://cdn.jsdelivr.net/gh/ApliNi/Moe-counter-PHP@main/MoeCounter/img/',
+	// 'imgPath-html' => 'https://ipacel.cc/+/MoeCounter/img/',
+	'imgPath-html' => 'https://fastly.jsdelivr.net/gh/ApliNi/Moe-counter-PHP@main/MoeCounter/img/',
 	'imgPath-xml' => 'img/',
 	// 图片名称前缀 `xxx{0-9}.png`, 也可以使用原版Moe-counter的目录 `xxx/{0-9}.png`
 	'img_prefix' => 'gelbooru',
